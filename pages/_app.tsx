@@ -4,16 +4,18 @@ import { appWithTranslation } from 'next-i18next';
 import type { AppProps } from 'next/app';
 import { Inter } from 'next/font/google';
 import '@/styles/globals.css';
-import { ClerkProvider, useUser } from '@clerk/nextjs';
+import { ClerkProvider } from '@clerk/nextjs';
+import { useAuth } from '@clerk/nextjs';
+import UserContext from './UserContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
 function MyApp({ Component, pageProps }: AppProps<{}>) {
   const queryClient = new QueryClient();
-  const { isLoaded, isSignedIn, user } = useUser();
+  const { isLoaded, userId, sessionId } = useAuth();
 
-  // In case the user is not signed in or if the user data is not loaded yet
-  if (!isLoaded || !isSignedIn) {
+  // In case the user signs out while on the page or if the auth is not loaded yet
+  if (!isLoaded || !userId) {
     return null;
   }
 
@@ -22,10 +24,12 @@ function MyApp({ Component, pageProps }: AppProps<{}>) {
       <Toaster />
       <QueryClientProvider client={queryClient}>
         <ClerkProvider {...pageProps}>
-          <div>
-            Hello, {user.firstName} welcome to Clerk
-          </div>
-          <Component {...pageProps} />
+          <UserContext.Provider value={{ userId, sessionId }}>
+            <div>
+              Hello, {userId} your current active session is {sessionId}
+            </div>
+            <Component {...pageProps} />
+          </UserContext.Provider>
         </ClerkProvider>
       </QueryClientProvider>
     </div>
