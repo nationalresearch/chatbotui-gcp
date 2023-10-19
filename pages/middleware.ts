@@ -6,7 +6,5 @@ import { authMiddleware } from "@clerk/nextjs";
 export default authMiddleware({});
 
 export const config = {
-  api: {
-    bodyParser: false,
-  },
+      matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
 };
