@@ -29,7 +29,7 @@ const handler = async (req: Request): Promise<Response> => {
       promptToSend = DEFAULT_SYSTEM_PROMPT;
     }
 
-    let temperatureToUse = temperature;
+    let temperatureToUse = 0.3;
     if (temperatureToUse == null) {
       temperatureToUse = DEFAULT_TEMPERATURE;
     }
