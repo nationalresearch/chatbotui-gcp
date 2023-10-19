@@ -9,6 +9,8 @@ import '@/styles/globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
+import { ClerkProvider } from "@clerk/nextjs";
+
 function App({ Component, pageProps }: AppProps<{}>) {
   const queryClient = new QueryClient();
 
@@ -16,7 +18,9 @@ function App({ Component, pageProps }: AppProps<{}>) {
     <div className={inter.className}>
       <Toaster />
       <QueryClientProvider client={queryClient}>
-        <Component {...pageProps} />
+        <ClerkProvider {...pageProps}>
+          <Component {...pageProps} />
+        </ClerkProvider>
       </QueryClientProvider>
     </div>
   );
